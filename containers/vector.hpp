@@ -570,13 +570,28 @@ namespace ft
                 std::swap(_alloc, x._alloc);
             }
 
-            // void	swap(vector &x)
-			// {
-			// 	ft::swap(this->_data, x._data);
-			// 	ft::swap(this->_capacity, x._capacity);
-			// 	ft::swap(this->_size, x._size);
-			// }
+            // void    swap (vector& x)
+            // {
+            //     pointer         tmp_data;
+            //     size_type       tmp_size;
+            //     allocator_type  tmp_alloc;
 
+            //     tmp_data = _data;
+            //     _data = x._data;
+            //     x._data = tmp_data;
+
+            //     tmp_size = _size;
+            //     _size = x._size;
+            //     x._size = tmp_size;
+
+            //     tmp_size = _capacity;
+            //     _capacity = x._capacity;
+            //     x._capacity = tmp_size;
+
+            //     tmp_alloc = _alloc;
+            //     _alloc = x._alloc;
+            //     x._alloc = tmp_alloc;
+            // }
             allocator_type get_allocator() const
             {
                 return (_alloc);
@@ -642,11 +657,14 @@ namespace ft
     {
         return (!(lhs < rhs));
     }
-    // template <class T, class Alloc>
-    // void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
-    // {
-    //     x.swap(y);
-    // }
+    template <class T, class Alloc>
+        void swap (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs)
+    {
+        ft::vector<T, Alloc> tmp;
+        tmp.swap(lhs);
+        lhs.swap(rhs);
+        rhs.swap(tmp);
+    }
 };
     namespace std{
         template< class T, class Alloc >
