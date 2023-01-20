@@ -31,7 +31,7 @@ namespace ft
         typedef reverse_iterator<const_iterator> const_reverse_iterator;
 
     private:
-        typedef typename allocator_type::template rebind<Node<value_type>>::other allocator_node_type;
+        typedef typename allocator_type::template rebind<Node<value_type> >::other allocator_node_type;
 
         ////--------CONSTRCT DESTRUCT---------
     public:
@@ -53,7 +53,7 @@ namespace ft
             this->_head = this->_null_node;
             _null_node->p = this->_head;
             _null_node->color = ft::BLACK;
-            this->_size = 0
+            this->_size = 0;
         }
         rb_tree(const node head, const key_compare &comp = key_compare(),
                 const allocator_type &alloc = allocator_type()) : _alloc(alloc),
@@ -79,12 +79,27 @@ namespace ft
                                         _alloc_node(other._alloc_node),
                                         _comp(other._comp)
         {
+            this->_null_node = this->_alloc_node.allocate(1);
+            try
+            {
+                this->_alloc_node.construct(this->_null_node);
+            }
+            catch (...)
+            {
+                this->_alloc_node.deallocate(this->_null_node, 1);
+                throw;
+            }
+            this->_head = this->_null_node;
+            this->_null_node->p = this->_head;
+            _null_node->color = ft::BLACK;
+            this->deep_copy(other.get_head(), other._null_node);
+            this->_size = other._size;
         }
         rb_tree &operator=(const rb_tree &other)
         {
             if (this != &other)
             {
-                if (_head != _null_node)
+                if (this->_head != _null_node)
                     this->clear(this->_head);
                 this->_alloc = other._alloc;
                 this->_alloc_node = other._alloc_node;
@@ -97,7 +112,7 @@ namespace ft
         }
         ~rb_tree()
         {
-            if (_head != _null_node)
+            if (this->_head != _null_node)
                 this->clear(this->_head);
             if (_null_node != 0)
             {
@@ -297,7 +312,8 @@ namespace ft
 
         iterator lower_bound(const value_type &data)
         {
-            iterator it1, it2;
+            iterator it1;
+            iterator it2;
 
             it1 = this->begin();
             it2 = this->end();
@@ -312,7 +328,8 @@ namespace ft
 
         const_iterator lower_bound(const value_type &data) const
         {
-            const_iterator it1, it2;
+            const_iterator it1;
+            const_iterator it2;
 
             it1 = this->begin();
             it2 = this->end();
@@ -333,14 +350,14 @@ namespace ft
             it2 = this->end();
             while (it1 != it2)
             {
-                if (!this->comp_data(data, *it1))
+                if (this->comp_data(data, *it1))
                     break;
                 ++it1;
             }
             return (it1);
         }
 
-        const_iterator upper_bound(const value_type &data) const;
+        const_iterator upper_bound(const value_type &data) const
         {
             const_iterator it1, it2;
 
@@ -348,7 +365,7 @@ namespace ft
             it2 = this->end();
             while (it1 != it2)
             {
-                if (!this->comp_data(data, *it1))
+                if (this->comp_data(data, *it1))
                     break;
                 ++it1;
             }
@@ -391,7 +408,7 @@ namespace ft
             }
         }
 
-        void inorder_tree_walk() const;
+        void inorder_tree_walk() const
         {
             this->inorder_tree_walk(this->_head);
         }
@@ -454,8 +471,8 @@ namespace ft
         ////-------------insert, erase, swap------------
         ft::pair<iterator, bool> insert(node head, node new_node)
         {
-            node_ptr tmp = head;
-            node_ptr parent = this->_null_node;
+            node tmp = head;
+            node parent = this->_null_node;
 
             while (tmp != this->_null_node)
             {
@@ -493,8 +510,8 @@ namespace ft
 
         iterator insert(iterator hint, const value_type &value)
         {
-            node_ptr new_node = this->create_node(value);
-            node_ptr head_node = hint.get_node();
+            node new_node = this->create_node(value);
+            node head_node = hint.get_node();
             ft::pair<iterator, bool> res;
 
             while (head_node != _null_node)
@@ -525,7 +542,7 @@ namespace ft
 
         ft::pair<iterator, bool> insert(const value_type &value)
         {
-            node_ptr new_node = this->create_node(value);
+            node new_node = this->create_node(value);
             ft::pair<iterator, bool> res = this->insert(new_node);
 
             if (res.second == false)
@@ -538,7 +555,7 @@ namespace ft
 
         void insert_fixup(node new_node)
         {
-            node_ptr y;
+            node y;
 
             while (new_node->p->color == ft::RED)
             {
@@ -592,9 +609,9 @@ namespace ft
 
         void erase(node old_node)
         {
-            node_ptr u = old_node;
-            node_ptr x;
-            t_rb_color u_original_color = u->color;
+            node u = old_node;
+            node x;
+            t_color u_original_color = u->color;
 
             if (old_node == _null_node)
                 return;
@@ -637,7 +654,7 @@ namespace ft
         size_type erase(value_type value)
         {
             size_type count = 0;
-            node_ptr found = this->search(value);
+            node found = this->search(value);
 
             if (found != _null_node)
             {
@@ -654,7 +671,7 @@ namespace ft
 
         void erase_fixup(node x)
         {
-            node_ptr w;
+            node w;
 
             while (x != _head && x->color == ft::BLACK)
             {
@@ -744,11 +761,11 @@ namespace ft
 
         void swap(rb_tree &other)
         {
-            node_ptr tmp_head = this->_head;
+            node tmp_head = this->_head;
             this->_head = other._head;
             other._head = tmp_head;
 
-            node_ptr tmp_null = this->_null_node;
+            node tmp_null = this->_null_node;
             this->_null_node = other._null_node;
             other._null_node = tmp_null;
 
@@ -837,7 +854,7 @@ namespace ft
 
         void rotate_left(node n)
         {
-            node_ptr y = n->right;
+            node y = n->right;
 
             n->right = y->left;
             if (y->left != _null_node)
@@ -855,7 +872,7 @@ namespace ft
 
         void rotate_right(node n)
         {
-            node_ptr y = n->left;
+            node y = n->left;
 
             n->left = y->right;
             if (y->right != _null_node)
@@ -879,11 +896,11 @@ namespace ft
         key_compare _comp;
         size_type _size;
 
-        void transplant(node u, node v);
-        void deep_copy(node other_node, node other_null);
-        bool comp_data(value_type v1, value_type v2) const;
-        void rotate_left(node node);
-        void rotate_right(node node);
+        // void transplant(node u, node v);
+        // void deep_copy(node other_node, node other_null);
+        // bool comp_data(value_type v1, value_type v2) const;
+        // void rotate_left(node node);
+        // void rotate_right(node node);
     };
 }
 

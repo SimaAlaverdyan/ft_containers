@@ -29,7 +29,7 @@ namespace ft
 		bidirectional_iterator(const bidirectional_iterator &other)
 		{
 			this->_null_node = other._null_node;
-			this->_elem = ptr;
+			this->_elem = other._elem;
 		}
 		bidirectional_iterator &operator=(const bidirectional_iterator &other)
 		{

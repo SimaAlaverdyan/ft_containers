@@ -19,7 +19,7 @@ namespace ft
             this->p = NULL;
             this->color = ft::RED;
         }
-        Node(const T &elem) : data()
+        Node(const T &elem) : data(elem)
         {
             this->left = NULL;
             this->right = NULL;
