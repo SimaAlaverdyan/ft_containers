@@ -51,6 +51,17 @@ namespace ft
     template<typename _Tp>
     struct is_same<_Tp, _Tp> : public true_type { };
 
+	template<bool cond, class T>
+    struct constif
+    {
+        typedef T type;
+    };
+
+    template <class T>
+    struct constif<true, T>
+    {
+        typedef const T type;
+    };
 };
 
 #endif

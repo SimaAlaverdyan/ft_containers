@@ -1,58 +1,24 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
+#include "../iterators/reverse_iterator.hpp"
+#include <memory.h>
+
+enum COL {RED, BLACK};
+
 namespace ft
 {
-    typedef enum e_color
-    {
-        BLACK,
-        RED
-    }           t_color;
-
-    template <typename T>
+    template <class T>
     struct Node
     {
-        Node() : data()
-        {
-            this->left = NULL;
-            this->right = NULL;
-            this->p = NULL;
-            this->color = ft::RED;
-        }
-        Node(const T &elem) : data(elem)
-        {
-            this->left = NULL;
-            this->right = NULL;
-            this->p = NULL;
-            this->color = ft::RED;
-        }
-        Node(const Node &copy)
-        {
-            this->data = copy.data;
-            this->left = copy.left;
-            this->right = copy.right;
-            this->p = copy.p;
-            this->color = copy.color;
-        }
-        Node &operator=(const Node &copy)
-        {
-            if (this != &copy)
-            {
-                this->data = copy.data;
-                this->left = copy.left;
-                this->right = copy.right;
-                this->p = copy.p;
-                this->color = copy.color;
-            }
-            return (*this);
-        }
-        ~Node() {};
-
-        T   data;
-        Node    *left;
-        Node    *right;
-        Node    *p;
-        t_color color;
+        typedef T* pointer;
+        enum COL color;
+        typedef Node* Node_pointer;
+        typedef Node& Node_reference;
+        struct Node *left;
+        struct Node *right;
+        struct Node *parent;
+        pointer data;
     };
 }
 
