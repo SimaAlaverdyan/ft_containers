@@ -13,11 +13,20 @@ namespace ft
             typedef Container container_type;
             typedef size_t size_type;
 
-            explicit stack (const container_type& ctnr = container_type()) : c(ctnr)
+            explicit stack (const container_type& ctnr = container_type())
             {
-                
+                this->c = ctnr;
             }
+
+			stack &operator=(const stack &other)
+            {
+                if (this != &other)
+                    this->c = other.c;
+                return (*this);
+            }
+
             virtual ~stack(){}
+
             bool empty() const
             {
                 return (c.empty());

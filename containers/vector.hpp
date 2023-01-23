@@ -2,7 +2,7 @@
 # define VECTOR_HPP
 
 #include <memory>
-#include "../iterators/normal_iterator.hpp"
+#include "../iterators/random_access_iterator.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include "../includes/type_traits.hpp"
 #include "../includes/algo.hpp"
@@ -204,39 +204,39 @@ namespace ft
             {
                 return (_size==0);
             }
-            // void reserve(size_type n)
-            // {
-            //     if ( n > this->max_size())
-            //         throw std::length_error("greater then max_size");
-            //     if (n > _capacity)
-            //     {
-            //         reallocate(n);
-            //     }
-            // }
-            void reserve (size_type n)
-        	{
-				if (n < _capacity)
-					return ;
-				pointer arr = _alloc.allocate(n);
-				try{
-					for (size_type i = 0; i < _size; i++)
-						_alloc.construct(arr + i, *(_data + i));
-				} catch (std::exception& e){
-					size_type i = 0;
-					while (arr + i != NULL && i < _size){
-						_alloc.destroy(arr + i);
-						i++;
-					}
-					_alloc.deallocate(arr, n);
-					throw;
-				}
-				for (size_type i = 0; i < _size; i++)
-					_alloc.destroy(_data + i);
-				if (_capacity)
-					_alloc.deallocate(_data, _capacity);
-				_capacity = n;
-				_data = arr;
-        	}
+            void reserve(size_type n)
+            {
+                if ( n > this->max_size())
+                    throw std::length_error("greater then max_size");
+                if (n > _capacity)
+                {
+                    reallocate(n);
+                }
+            }
+            // void reserve (size_type n)
+        	// {
+			// 	if (n < _capacity)
+			// 		return ;
+			// 	pointer arr = _alloc.allocate(n);
+			// 	try{
+			// 		for (size_type i = 0; i < _size; i++)
+			// 			_alloc.construct(arr + i, *(_data + i));
+			// 	} catch (std::exception& e){
+			// 		size_type i = 0;
+			// 		while (arr + i != NULL && i < _size){
+			// 			_alloc.destroy(arr + i);
+			// 			i++;
+			// 		}
+			// 		_alloc.deallocate(arr, n);
+			// 		throw;
+			// 	}
+			// 	for (size_type i = 0; i < _size; i++)
+			// 		_alloc.destroy(_data + i);
+			// 	if (_capacity)
+			// 		_alloc.deallocate(_data, _capacity);
+			// 	_capacity = n;
+			// 	_data = arr;
+        	// }
 
         public:
             reference operator[] (size_type n)
